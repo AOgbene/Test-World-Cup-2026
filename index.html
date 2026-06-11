@@ -4,38 +4,34 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>World Cup 2026 Sweepstake</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-  :root {
-    --green-deep: #0A2E1A; --green-mid: #1A5C34; --gold: #FFD700;
-    --white: #F5F5F0; --grey-light: #E8E8E4; --grey-mid: #AAAAAA;
-    --red: #E63946; --card-bg: #112B1C; --card-border: #1E4A2A;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--green-deep); color: var(--white); font-family: 'Inter', sans-serif; font-size: 15px; min-height: 100vh; }
+:root {
+  --green-deep:#0A2E1A; --green-mid:#1A5C34; --gold:#FFD700;
+  --white:#F5F5F0; --grey-light:#E8E8E4; --grey-mid:#AAAAAA;
+  --red:#E63946; --card-bg:#112B1C; --card-border:#1E4A2A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--green-deep);color:var(--white);font-family:'Inter';font-size:15px}
 
-  .site-header { padding: 16px; border-bottom: 1px solid var(--card-border); }
-  .site-title { font-family: 'Bebas Neue'; font-size: 28px; color: var(--gold); }
+.site-header{padding:16px;border-bottom:1px solid var(--card-border)}
+.site-title{font-family:'Bebas Neue';font-size:28px;color:var(--gold)}
 
-  .nav-tabs { display: flex; border-bottom: 2px solid var(--card-border); }
-  .nav-tab { flex: 1; padding: 12px; text-align: center; color: var(--grey-mid); cursor: pointer; }
-  .nav-tab.active { color: var(--gold); border-bottom: 3px solid var(--gold); }
+.nav-tabs{display:flex;border-bottom:2px solid var(--card-border)}
+.nav-tab{flex:1;padding:12px;text-align:center;color:var(--grey-mid);cursor:pointer}
+.nav-tab.active{color:var(--gold);border-bottom:3px solid var(--gold)}
 
-  .tab-content { display: none; padding: 16px; }
-  .tab-content.active { display: block; }
+.tab-content{display:none;padding:16px}
+.tab-content.active{display:block}
 
-  .stage-title { font-family:'Bebas Neue'; font-size:20px; color:var(--gold); margin:16px 0 10px; }
+.stage-title{font-family:'Bebas Neue';color:var(--gold);margin:16px 0 10px}
 
-  .fixture-card { background:var(--card-bg); border:1px solid var(--card-border); border-radius:10px; padding:12px; margin-bottom:8px; }
-  .fixture-meta { display:flex; justify-content:space-between; font-size:11px; color:var(--grey-mid); }
-  .fixture-teams { display:flex; justify-content:space-between; align-items:center; }
-  .fixture-score { font-family:'Bebas Neue'; font-size:20px; color:var(--gold); }
-
-  .today-match {
-    border-color: var(--gold);
-    box-shadow: 0 0 10px rgba(255,215,0,0.4);
-  }
+.fixture-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:10px;padding:12px;margin-bottom:8px}
+.fixture-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--grey-mid)}
+.fixture-teams{display:flex;justify-content:space-between;align-items:center}
+.fixture-score{font-family:'Bebas Neue';color:var(--gold);font-size:20px}
 </style>
 </head>
 
@@ -46,46 +42,49 @@
 </div>
 
 <div class="nav-tabs">
-  <div class="nav-tab active" onclick="showTab('fixtures',this)">Fixtures</div>
+  <div class="nav-tab active" onclick="showTab('groups',this)">Groups</div>
+  <div class="nav-tab" onclick="showTab('fixtures',this)">Fixtures</div>
+  <div class="nav-tab" onclick="showTab('setup',this)">Setup</div>
 </div>
 
-<div id="tab-fixtures" class="tab-content active"></div>
+<div id="tab-groups" class="tab-content active"></div>
+<div id="tab-fixtures" class="tab-content"></div>
+<div id="tab-setup" class="tab-content"></div>
 
 <script>
 
 // ✅ ORIGINAL RESULTS (unchanged except Bosnia fix)
 const RESULTS = [
-  { home:"Mexico", away:"South Korea", homeScore:null, awayScore:null },
-  { home:"Mexico", away:"Czechia", homeScore:null, awayScore:null },
-  { home:"Mexico", away:"South Africa", homeScore:null, awayScore:null },
-  { home:"South Korea", away:"Czechia", homeScore:null, awayScore:null },
-  { home:"South Korea", away:"South Africa", homeScore:null, awayScore:null },
-  { home:"Czechia", away:"South Africa", homeScore:null, awayScore:null },
+  { home:"Mexico",away:"South Korea",homeScore:null,awayScore:null },
+  { home:"Mexico",away:"Czechia",homeScore:null,awayScore:null },
+  { home:"Mexico",away:"South Africa",homeScore:null,awayScore:null },
+  { home:"South Korea",away:"Czechia",homeScore:null,awayScore:null },
+  { home:"South Korea",away:"South Africa",homeScore:null,awayScore:null },
+  { home:"Czechia",away:"South Africa",homeScore:null,awayScore:null },
 
-  { home:"Canada", away:"Qatar", homeScore:null, awayScore:null },
-  { home:"Canada", away:"Switzerland", homeScore:null, awayScore:null },
-  { home:"Canada", away:"Bosnia & Herz.", homeScore:null, awayScore:null },
-  { home:"Qatar", away:"Switzerland", homeScore:null, awayScore:null },
-  { home:"Qatar", away:"Bosnia & Herz.", homeScore:null, awayScore:null },
-  { home:"Switzerland", away:"Bosnia & Herz.", homeScore:null, awayScore:null }
+  { home:"Canada",away:"Qatar",homeScore:null,awayScore:null },
+  { home:"Canada",away:"Switzerland",homeScore:null,awayScore:null },
+  { home:"Canada",away:"Bosnia & Herz.",homeScore:null,awayScore:null },
+  { home:"Qatar",away:"Switzerland",homeScore:null,awayScore:null },
+  { home:"Qatar",away:"Bosnia & Herz.",homeScore:null,awayScore:null },
+  { home:"Switzerland",away:"Bosnia & Herz.",homeScore:null,awayScore:null }
 ];
 
-// ✅ NEW META (order + matchday)
-const FIXTURE_META = new Map();
+// ✅ NEW: metadata for sorting + matchdays
+const FIXTURE_META=new Map();
 RESULTS.forEach((r,i)=>{
   FIXTURE_META.set(`${r.home}|${r.away}`,{
     order:i,
-    matchday: Math.floor(i/2)+1,
-    date: r.date || null,
-    time: r.time || null
+    matchday:Math.floor(i/2)+1,
+    date:r.date||null,
+    time:r.time||null
   });
 });
 
-// ✅ Irish time helper (only used if you later add time)
-function formatIrishTime(dateStr,timeStr){
-  if(!dateStr||!timeStr)return '';
-  const d=new Date(`${dateStr}T${timeStr}:00Z`);
-  return d.toLocaleTimeString('en-IE',{hour:'2-digit',minute:'2-digit',hour12:false});
+// ✅ Irish time conversion (optional use)
+function formatIrishTime(d,t){
+  if(!d||!t)return '';
+  return new Date(`${d}T${t}:00Z`).toLocaleTimeString('en-IE',{hour:'2-digit',minute:'2-digit',hour12:false});
 }
 
 // ✅ GROUPS
@@ -97,27 +96,44 @@ const WC_GROUPS={
 // ✅ BUILD FIXTURES
 function buildFixtures(){
   const f=[];
-  Object.entries(WC_GROUPS).forEach(([grp,teams])=>{
+  Object.entries(WC_GROUPS).forEach(([g,teams])=>{
     for(let i=0;i<teams.length;i++){
       for(let j=i+1;j<teams.length;j++){
-        f.push({stage:'group',wcGroup:grp,home:teams[i],away:teams[j]});
+        f.push({stage:'group',wcGroup:g,home:teams[i],away:teams[j]});
       }
     }
   });
   return f;
 }
 
-const fixtures = buildFixtures();
+const fixtures=buildFixtures();
 
-// ✅ UPDATED RENDER (only logic added)
+// ✅ GROUP TAB (original functionality)
+function renderGroupsTab(){
+  let html='';
+  Object.entries(WC_GROUPS).forEach(([g,teams])=>{
+    html+=`<div class="stage-title">Group ${g}</div>`;
+    teams.forEach(t=>html+=`<div>${t}</div>`);
+  });
+  document.getElementById('tab-groups').innerHTML=html;
+}
+
+// ✅ SETUP TAB (placeholder preserved)
+function renderSetupTab(){
+  document.getElementById('tab-setup').innerHTML=`
+    <div class="stage-title">Setup</div>
+    <div>Scoring rules & configuration here</div>
+  `;
+}
+
+// ✅ FIXTURES TAB (ONLY section enhanced)
 function renderFixturesTab(){
 
-  const sorted = fixtures
+  const sorted=fixtures
     .filter(f=>f.stage==='group')
     .sort((a,b)=>{
       const A=FIXTURE_META.get(`${a.home}|${a.away}`)||{};
       const B=FIXTURE_META.get(`${b.home}|${b.away}`)||{};
-
       if(A.matchday!==B.matchday){
         return (A.matchday||99)-(B.matchday||99);
       }
@@ -127,8 +143,8 @@ function renderFixturesTab(){
   const grouped={};
 
   sorted.forEach(f=>{
-    const meta = FIXTURE_META.get(`${f.home}|${f.away}`)||{};
-    const md = meta.matchday||99;
+    const m=FIXTURE_META.get(`${f.home}|${f.away}`)||{};
+    const md=m.matchday||99;
     if(!grouped[md])grouped[md]=[];
     grouped[md].push(f);
   });
@@ -139,13 +155,13 @@ function renderFixturesTab(){
     html+=`<div class="stage-title">Matchday ${md}</div>`;
 
     fs.forEach(f=>{
-      const meta = FIXTURE_META.get(`${f.home}|${f.away}`)||{};
-      const koTime = meta.time ? formatIrishTime(meta.date, meta.time) : '';
+      const m=FIXTURE_META.get(`${f.home}|${f.away}`)||{};
+      const time=formatIrishTime(m.date,m.time);
 
       html+=`
       <div class="fixture-card">
         <div class="fixture-meta">
-          <span>Group ${f.wcGroup}${koTime ? ' · '+koTime : ''}</span>
+          <span>Group ${f.wcGroup}${time ? ' · '+time : ''}</span>
         </div>
         <div class="fixture-teams">
           <div>${f.home}</div>
@@ -156,7 +172,7 @@ function renderFixturesTab(){
     });
   });
 
-  document.getElementById('tab-fixtures').innerHTML = html;
+  document.getElementById('tab-fixtures').innerHTML=html;
 }
 
 // ✅ NAV
@@ -168,7 +184,11 @@ function showTab(name,el){
 }
 
 // ✅ INIT
-document.addEventListener("DOMContentLoaded",renderFixturesTab);
+document.addEventListener("DOMContentLoaded",()=>{
+  renderGroupsTab();
+  renderFixturesTab();
+  renderSetupTab();
+});
 
 </script>
 
