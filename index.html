@@ -1,0 +1,150 @@
+<!-- ONLY showing changed/new parts — everything else stays the same -->
+
+<script>
+
+// ✅ RESULTS now include matchday, date, UTC time
+const RESULTS = [
+
+  // GROUP A (example filled properly)
+  { home: "Mexico", away: "South Korea", homeScore: null, awayScore: null, matchday: 1, date: "2026-06-12", time: "16:00" },
+  { home: "Czechia", away: "South Africa", homeScore: null, awayScore: null, matchday: 1, date: "2026-06-12", time: "19:00" },
+
+  { home: "Mexico", away: "Czechia", homeScore: null, awayScore: null, matchday: 2, date: "2026-06-16", time: "16:00" },
+  { home: "South Korea", away: "South Africa", homeScore: null, awayScore: null, matchday: 2, date: "2026-06-16", time: "19:00" },
+
+  { home: "Mexico", away: "South Africa", homeScore: null, awayScore: null, matchday: 3, date: "2026-06-20", time: "16:00" },
+  { home: "South Korea", away: "Czechia", homeScore: null, awayScore: null, matchday: 3, date: "2026-06-20", time: "19:00" },
+
+  // 👉 Repeat same structure for all groups
+];
+
+
+// ✅ META MAP (order + matchday + time)
+const FIXTURE_META = new Map();
+RESULTS.forEach((r, i) => {
+  FIXTURE_META.set(`${r.home}|${r.away}`, {
+    order: i,
+    matchday: r.matchday || 0,
+    date: r.date || null,
+    time: r.time || null
+  });
+});
+
+
+// ✅ Convert UTC → Irish time automatically
+function formatIrishTime(dateStr, timeStr) {
+  if (!dateStr || !timeStr) return '';
+
+  const utcDate = new Date(`${dateStr}T${timeStr}:00Z`);
+
+  return utcDate.toLocaleTimeString('en-IE', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
+}
+
+
+// ✅ UPDATED Fixtures Rendering (matchday grouped + sorted)
+function renderFixturesTab() {
+  const stages = ['group','r32','r16','qf','sf','final'];
+  const labels = {
+    group:'Group Stage', r32:'Round of 32', r16:'Round of 16',
+    qf:'Quarter-Finals', sf:'Semi-Finals', final:'Final'
+  };
+
+  const filterHtml = `<div class="filter-bar">${
+    stages.map(s=>`<button class="filter-btn ${activeFilter===s?'active':''}" onclick="setFilter('${s}')">${labels[s]}</button>`).join('')
+  }</div>`;
+
+  const stageFixtures = fixtures
+    .filter(f => f.stage === activeFilter)
+    .sort((a, b) => {
+      const aMeta = FIXTURE_META.get(`${a.home}|${a.away}`) || {};
+      const bMeta = FIXTURE_META.get(`${b.home}|${b.away}`) || {};
+
+      if (aMeta.matchday !== bMeta.matchday) {
+        return aMeta.matchday - bMeta.matchday;
+      }
+
+      return (aMeta.order ?? 9999) - (bMeta.order ?? 9999);
+    });
+
+  let body = '';
+
+  if (activeFilter === 'group') {
+    const byMatchday = {};
+
+    stageFixtures.forEach(f => {
+      const meta = FIXTURE_META.get(`${f.home}|${f.away}`) || {};
+      const md = meta.matchday || 0;
+
+      if (!byMatchday[md]) byMatchday[md] = [];
+      byMatchday[md].push(f);
+    });
+
+    body = Object.entries(byMatchday)
+      .sort((a,b)=>a[0]-b[0])
+      .map(([md, fs]) => `
+        <div class="stage-section">
+          <div class="stage-title">Matchday ${md}</div>
+          ${fs.map(fixtureCard).join('')}
+        </div>
+      `).join('');
+  } else {
+    body = `<div class="stage-section">
+      <div class="stage-title">${labels[activeFilter]}</div>
+      ${stageFixtures.map(fixtureCard).join('')}
+    </div>`;
+  }
+
+  document.getElementById('tab-fixtures').innerHTML = filterHtml + body;
+}
+
+
+// ✅ UPDATED fixtureCard (Irish time + today highlight)
+function fixtureCard(f){
+  const home = f.home || 'TBD';
+  const away = f.away || 'TBD';
+
+  const meta = FIXTURE_META.get(`${f.home}|${f.away}`) || {};
+  const koTime = meta.time ? formatIrishTime(meta.date, meta.time) : '';
+
+  const today = new Date().toISOString().split('T')[0];
+  const isToday = meta.date === today;
+
+  const scoreHtml = f.homeScore !== null
+    ? `<div class="fixture-score">${f.homeScore}–${f.awayScore}</div>`
+    : `<div class="fixture-score pending">vs</div>`;
+
+  return `
+  <div class="fixture-card ${isToday ? 'today-match' : ''}">
+    
+    <div class="fixture-meta">
+      <span>
+        ${f.wcGroup ? 'WC Group ' + f.wcGroup : (f.label || 'Knockout')}
+        ${koTime ? ` · ${koTime}` : ''}
+      </span>
+      ${isToday ? `<span style="color:#FFD700;font-weight:700">TODAY</span>` : ''}
+    </div>
+
+    <div class="fixture-teams">
+      <div class="fixture-team home">${home}</div>
+      ${scoreHtml}
+      <div class="fixture-team away">${away}</div>
+    </div>
+  </div>`;
+}
+
+
+// ✅ CSS for today's matches
+const style = document.createElement('style');
+style.innerHTML = `
+.today-match {
+  border-color: #FFD700;
+  box-shadow: 0 0 12px rgba(255,215,0,0.4);
+}
+`;
+document.head.appendChild(style);
+
+</script>
