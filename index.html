@@ -1,150 +1,171 @@
-<!-- ONLY showing changed/new parts — everything else stays the same -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Cup 2026 Sweepstake</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+body{background:#0A2E1A;color:#F5F5F0;font-family:Inter,sans-serif;margin:0}
+.site-header{padding:16px;border-bottom:1px solid #1E4A2A}
+.site-title{font-family:'Bebas Neue';color:#FFD700;font-size:28px}
+.nav-tabs{display:flex;border-bottom:1px solid #1E4A2A}
+.nav-tab{flex:1;text-align:center;padding:10px;cursor:pointer;color:#AAA}
+.nav-tab.active{color:#FFD700;border-bottom:2px solid #FFD700}
+.tab-content{display:none;padding:16px}
+.tab-content.active{display:block}
+
+.fixture-card{
+  background:#112B1C;
+  border:1px solid #1E4A2A;
+  border-radius:10px;
+  padding:12px;
+  margin-bottom:10px;
+}
+.fixture-meta{font-size:11px;color:#AAA;display:flex;justify-content:space-between}
+.fixture-team{font-weight:600}
+.fixture-teams{display:flex;justify-content:space-between;align-items:center}
+.fixture-score{font-family:'Bebas Neue';color:#FFD700;font-size:20px}
+
+.today-match{
+  border-color:#FFD700;
+  box-shadow:0 0 10px rgba(255,215,0,0.5);
+}
+.stage-title{
+  font-family:'Bebas Neue';
+  color:#FFD700;
+  font-size:18px;
+  margin:20px 0 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="site-header">
+  <div class="site-title">⚽ World Cup 2026</div>
+</div>
+
+<div class="nav-tabs">
+  <div class="nav-tab active" onclick="showTab('fixtures',this)">Fixtures</div>
+</div>
+
+<div id="tab-fixtures" class="tab-content active"></div>
 
 <script>
 
-// ✅ RESULTS now include matchday, date, UTC time
+// ✅ RESULTS (you can expand this)
 const RESULTS = [
+  { home:"Mexico", away:"South Korea", matchday:1, date:"2026-06-12", time:"16:00" },
+  { home:"Czechia", away:"South Africa", matchday:1, date:"2026-06-12", time:"19:00" },
 
-  // GROUP A (example filled properly)
-  { home: "Mexico", away: "South Korea", homeScore: null, awayScore: null, matchday: 1, date: "2026-06-12", time: "16:00" },
-  { home: "Czechia", away: "South Africa", homeScore: null, awayScore: null, matchday: 1, date: "2026-06-12", time: "19:00" },
+  { home:"Mexico", away:"Czechia", matchday:2, date:"2026-06-16", time:"16:00" },
+  { home:"South Korea", away:"South Africa", matchday:2, date:"2026-06-16", time:"19:00" },
 
-  { home: "Mexico", away: "Czechia", homeScore: null, awayScore: null, matchday: 2, date: "2026-06-16", time: "16:00" },
-  { home: "South Korea", away: "South Africa", homeScore: null, awayScore: null, matchday: 2, date: "2026-06-16", time: "19:00" },
-
-  { home: "Mexico", away: "South Africa", homeScore: null, awayScore: null, matchday: 3, date: "2026-06-20", time: "16:00" },
-  { home: "South Korea", away: "Czechia", homeScore: null, awayScore: null, matchday: 3, date: "2026-06-20", time: "19:00" },
-
-  // 👉 Repeat same structure for all groups
+  { home:"Mexico", away:"South Africa", matchday:3, date:"2026-06-20", time:"16:00" },
+  { home:"South Korea", away:"Czechia", matchday:3, date:"2026-06-20", time:"19:00" }
 ];
 
 
-// ✅ META MAP (order + matchday + time)
+// ✅ META
 const FIXTURE_META = new Map();
-RESULTS.forEach((r, i) => {
-  FIXTURE_META.set(`${r.home}|${r.away}`, {
-    order: i,
-    matchday: r.matchday || 0,
-    date: r.date || null,
-    time: r.time || null
+RESULTS.forEach((r,i)=>{
+  FIXTURE_META.set(`${r.home}|${r.away}`,{
+    order:i,
+    matchday:r.matchday,
+    date:r.date,
+    time:r.time
   });
 });
 
 
-// ✅ Convert UTC → Irish time automatically
-function formatIrishTime(dateStr, timeStr) {
-  if (!dateStr || !timeStr) return '';
-
-  const utcDate = new Date(`${dateStr}T${timeStr}:00Z`);
-
-  return utcDate.toLocaleTimeString('en-IE', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
+// ✅ TIME CONVERSION (UTC → Ireland)
+function formatIrishTime(dateStr,timeStr){
+  const d = new Date(`${dateStr}T${timeStr}:00Z`);
+  return d.toLocaleTimeString('en-IE',{
+    hour:'2-digit',
+    minute:'2-digit',
+    hour12:false
   });
 }
 
 
-// ✅ UPDATED Fixtures Rendering (matchday grouped + sorted)
-function renderFixturesTab() {
-  const stages = ['group','r32','r16','qf','sf','final'];
-  const labels = {
-    group:'Group Stage', r32:'Round of 32', r16:'Round of 16',
-    qf:'Quarter-Finals', sf:'Semi-Finals', final:'Final'
-  };
+// ✅ BUILD FIXTURES
+const fixtures = RESULTS.map(r=>({
+  ...r,
+  stage:'group',
+  wcGroup:'A'
+}));
 
-  const filterHtml = `<div class="filter-bar">${
-    stages.map(s=>`<button class="filter-btn ${activeFilter===s?'active':''}" onclick="setFilter('${s}')">${labels[s]}</button>`).join('')
-  }</div>`;
 
-  const stageFixtures = fixtures
-    .filter(f => f.stage === activeFilter)
-    .sort((a, b) => {
-      const aMeta = FIXTURE_META.get(`${a.home}|${a.away}`) || {};
-      const bMeta = FIXTURE_META.get(`${b.home}|${b.away}`) || {};
+// ✅ RENDER
+function renderFixtures(){
 
-      if (aMeta.matchday !== bMeta.matchday) {
-        return aMeta.matchday - bMeta.matchday;
-      }
+  const sorted = fixtures.sort((a,b)=>{
+    const ma = FIXTURE_META.get(`${a.home}|${a.away}`);
+    const mb = FIXTURE_META.get(`${b.home}|${b.away}`);
 
-      return (aMeta.order ?? 9999) - (bMeta.order ?? 9999);
-    });
+    if(ma.matchday!==mb.matchday){
+      return ma.matchday-mb.matchday;
+    }
+    return ma.order-mb.order;
+  });
 
-  let body = '';
+  const byMatchday = {};
+  sorted.forEach(f=>{
+    const md = f.matchday;
+    if(!byMatchday[md]) byMatchday[md]=[];
+    byMatchday[md].push(f);
+  });
 
-  if (activeFilter === 'group') {
-    const byMatchday = {};
+  let html='';
 
-    stageFixtures.forEach(f => {
-      const meta = FIXTURE_META.get(`${f.home}|${f.away}`) || {};
-      const md = meta.matchday || 0;
+  Object.entries(byMatchday).forEach(([md,fs])=>{
+    html+=`<div class="stage-title">Matchday ${md}</div>`;
 
-      if (!byMatchday[md]) byMatchday[md] = [];
-      byMatchday[md].push(f);
-    });
+    fs.forEach(f=>{
+      const meta = FIXTURE_META.get(`${f.home}|${f.away}`);
+      const time = formatIrishTime(meta.date,meta.time);
 
-    body = Object.entries(byMatchday)
-      .sort((a,b)=>a[0]-b[0])
-      .map(([md, fs]) => `
-        <div class="stage-section">
-          <div class="stage-title">Matchday ${md}</div>
-          ${fs.map(fixtureCard).join('')}
+      const today = new Date().toISOString().split('T')[0];
+      const isToday = meta.date===today;
+
+      html+=`
+      <div class="fixture-card ${isToday?'today-match':''}">
+        <div class="fixture-meta">
+          <span>${f.home} vs ${f.away}</span>
+          <span>${time}</span>
         </div>
-      `).join('');
-  } else {
-    body = `<div class="stage-section">
-      <div class="stage-title">${labels[activeFilter]}</div>
-      ${stageFixtures.map(fixtureCard).join('')}
-    </div>`;
-  }
 
-  document.getElementById('tab-fixtures').innerHTML = filterHtml + body;
+        <div class="fixture-teams">
+          <div class="fixture-team">${f.home}</div>
+          <div class="fixture-score">vs</div>
+          <div class="fixture-team">${f.away}</div>
+        </div>
+      </div>`;
+    });
+
+  });
+
+  document.getElementById("tab-fixtures").innerHTML = html;
 }
 
 
-// ✅ UPDATED fixtureCard (Irish time + today highlight)
-function fixtureCard(f){
-  const home = f.home || 'TBD';
-  const away = f.away || 'TBD';
-
-  const meta = FIXTURE_META.get(`${f.home}|${f.away}`) || {};
-  const koTime = meta.time ? formatIrishTime(meta.date, meta.time) : '';
-
-  const today = new Date().toISOString().split('T')[0];
-  const isToday = meta.date === today;
-
-  const scoreHtml = f.homeScore !== null
-    ? `<div class="fixture-score">${f.homeScore}–${f.awayScore}</div>`
-    : `<div class="fixture-score pending">vs</div>`;
-
-  return `
-  <div class="fixture-card ${isToday ? 'today-match' : ''}">
-    
-    <div class="fixture-meta">
-      <span>
-        ${f.wcGroup ? 'WC Group ' + f.wcGroup : (f.label || 'Knockout')}
-        ${koTime ? ` · ${koTime}` : ''}
-      </span>
-      ${isToday ? `<span style="color:#FFD700;font-weight:700">TODAY</span>` : ''}
-    </div>
-
-    <div class="fixture-teams">
-      <div class="fixture-team home">${home}</div>
-      ${scoreHtml}
-      <div class="fixture-team away">${away}</div>
-    </div>
-  </div>`;
+// ✅ NAV
+function showTab(name,el){
+  document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(e=>e.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  el.classList.add('active');
 }
 
 
-// ✅ CSS for today's matches
-const style = document.createElement('style');
-style.innerHTML = `
-.today-match {
-  border-color: #FFD700;
-  box-shadow: 0 0 12px rgba(255,215,0,0.4);
-}
-`;
-document.head.appendChild(style);
+// ✅ INIT
+document.addEventListener("DOMContentLoaded", renderFixtures);
 
 </script>
+
+</body>
+</html>
