@@ -467,7 +467,8 @@ function fixtureCard(f){
 
 function setFilter(s){activeFilter=s;renderFixturesTab();}
 
-<div class="scoring-key">
+function renderSetupTab(){
+  <div class="scoring-key">
       <h3>Prizes</h3>
       <div class="score-rule"><span>🥇 First Place</span><span class="score-pts" style="color:#FFD700">€60</span></div>
       <div class="score-rule"><span>🥈 Second Place</span><span class="score-pts" style="color:#AAAAAA">€20</span></div>
@@ -476,7 +477,6 @@ function setFilter(s){activeFilter=s;renderFixturesTab();}
         <span style="font-size:12px;color:var(--grey-mid);line-height:1.5">In the event of a tie, the winner will be decided by the highest combined points total of each player's three lowest-ranked teams.</span>
       </div>
     </div>
-function renderSetupTab(){
   document.getElementById('tab-setup').innerHTML=`
     <div class="scoring-key">
       <h3>Scoring Rules</h3>
