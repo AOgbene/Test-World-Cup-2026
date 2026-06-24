@@ -221,7 +221,9 @@ const KNOCKOUT_RESULTS = {
   // Round of 32 — fill in as matches are played
   // e.g. "M73": { homeScore: 2, awayScore: 1, penWinner: null },
 };
-// ============================================================
+  
+// 
+============================================================
 //  END OF RESULTS SECTION — do not edit below this line
 // ============================================================
 
@@ -336,6 +338,69 @@ const GROUP_FIXTURES = [
   { date:"Sat 27 Jun", wcGroup:"J", home:"Algeria",      away:"Austria" },
   { date:"Sat 27 Jun", wcGroup:"J", home:"Jordan",       away:"Argentina" },
 ];
+
+// ============================================================
+//  ROUND OF 32 FIXTURES
+//  homeDesc / awayDesc shown until real teams are confirmed.
+//  Set home/away with actual team names once known.
+//  Add scores to KNOCKOUT_RESULTS using matchId key.
+// ============================================================
+const R32_FIXTURES = [
+  // ── Sun 29 Jun ─────────────────────────────────────────────────────
+  { matchId:"M73", date:"Sun 29 Jun", label:"Round of 32", venue:"Los Angeles",
+    homeDesc:"1st Group A", awayDesc:"2nd Group B",
+    home:null, away:null },
+  // ── Mon 30 Jun ─────────────────────────────────────────────────────
+  { matchId:"M76", date:"Mon 30 Jun", label:"Round of 32", venue:"Houston",
+    homeDesc:"1st Group C", awayDesc:"2nd Group F",
+    home:null, away:null },
+  { matchId:"M74", date:"Mon 30 Jun", label:"Round of 32", venue:"Boston",
+    homeDesc:"Germany (1st/2nd Grp E)", awayDesc:"3rd Place (A/B/C/D/F)",
+    home:"Germany", away:null },
+  // ── Tue 1 Jul ──────────────────────────────────────────────────────
+  { matchId:"M75", date:"Tue 1 Jul", label:"Round of 32", venue:"Monterrey",
+    homeDesc:"1st Group F", awayDesc:"2nd Group C",
+    home:null, away:null },
+  { matchId:"M78", date:"Tue 1 Jul", label:"Round of 32", venue:"Dallas",
+    homeDesc:"2nd Group E", awayDesc:"2nd Group I",
+    home:null, away:null },
+  { matchId:"M77", date:"Tue 1 Jul", label:"Round of 32", venue:"New Jersey",
+    homeDesc:"1st Group I", awayDesc:"3rd Place (C/D/F/G/H)",
+    home:null, away:null },
+  // ── Wed 2 Jul ──────────────────────────────────────────────────────
+  { matchId:"M79", date:"Wed 2 Jul", label:"Round of 32", venue:"Mexico City",
+    homeDesc:"Mexico (1st Grp A)", awayDesc:"3rd Place (C/E/F/H/I)",
+    home:"Mexico", away:null },
+  { matchId:"M80", date:"Wed 2 Jul", label:"Round of 32", venue:"Atlanta",
+    homeDesc:"1st Group L", awayDesc:"3rd Place (E/H/I/J/K)",
+    home:null, away:null },
+  { matchId:"M82", date:"Wed 2 Jul", label:"Round of 32", venue:"Seattle",
+    homeDesc:"1st Group G", awayDesc:"3rd Place (A/E/H/I/J)",
+    home:null, away:null },
+  // ── Thu 3 Jul ──────────────────────────────────────────────────────
+  { matchId:"M81", date:"Thu 3 Jul", label:"Round of 32", venue:"Toronto",
+    homeDesc:"USA (1st/2nd Grp D)", awayDesc:"3rd Place (B/E/G/J/L)",
+    home:"USA", away:null },
+  { matchId:"M83", date:"Thu 3 Jul", label:"Round of 32", venue:"Vancouver",
+    homeDesc:"1st Group J", awayDesc:"2nd Group K",
+    home:null, away:null },
+  // ── Fri 4 Jul ──────────────────────────────────────────────────────
+  { matchId:"M84", date:"Fri 4 Jul", label:"Round of 32", venue:"Vancouver",
+    homeDesc:"1st Group B", awayDesc:"3rd Place (E/F/G/I/J)",
+    home:null, away:null },
+  { matchId:"M86", date:"Fri 4 Jul", label:"Round of 32", venue:"Dallas",
+    homeDesc:"2nd Group D", awayDesc:"2nd Group G",
+    home:null, away:null },
+  { matchId:"M85", date:"Fri 4 Jul", label:"Round of 32", venue:"Miami",
+    homeDesc:"Argentina (1st Grp J)", awayDesc:"2nd Group H",
+    home:"Argentina", away:null },
+  // ── Sat 5 Jul ──────────────────────────────────────────────────────
+  { matchId:"M87", date:"Sat 5 Jul", label:"Round of 32", venue:"Kansas City",
+    homeDesc:"2nd Group J", awayDesc:"1st Group K (or 2nd)",
+    home:null, away:null },
+  { matchId:"M88", date:"Sat 5 Jul", label:"Round of 32", venue:"Kansas City",
+    homeDesc:"1st Group K", awayDesc:"3rd Place (D/E/I/J/L)",
+    home:null, away:null },
 
 const KNOCKOUT_STAGES = [
   {stage:'r32', label:'Round of 32', count:16},
