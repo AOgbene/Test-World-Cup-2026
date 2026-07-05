@@ -120,6 +120,23 @@ const ELIMINATED = [
   "Iran",
   "Uzbekistan",
   "South Africa",
+  "Japan",
+  "Germany",
+  "Netherlands",
+  "Ivory Coast",
+  "Sweden",
+  "Ecuador",
+  "DR Congo",
+  "Senegal",
+  "Bosnia & Herz.",
+  "Austria",
+  "Croatia",
+  "Algeria",
+  "Australia",
+  "Ghana",
+  "Cape Verde",
+  "Canada",
+  "Paraguay", 
 ];
 
 const RESULTS = {
@@ -222,11 +239,27 @@ const RESULTS = {
 const KNOCKOUT_RESULTS = {
   // ── Round of 32 ──────────────────────────────────────────
   "M73": { homeScore: 0, awayScore: 1, penWinner: null },
+  "M76": { homeScore: 2, awayScore: 1, penWinner: null },
+  "M74": { homeScore: 1, awayScore: 1, penWinner: "Paraguay" },
+  "M75": { homeScore: 1, awayScore: 1, penWinner: "Morocco" },
+  "M78": { homeScore: 1, awayScore: 2, penWinner: null },
+  "M77": { homeScore: 3, awayScore: 0, penWinner: null },
+  "M79": { homeScore: 2, awayScore: 0, penWinner: null },
+  "M80": { homeScore: 2, awayScore: 1, penWinner: null },
+  "M82": { homeScore: 3, awayScore: 2, penWinner: null },
+  "M81": { homeScore: 2, awayScore: 0, penWinner: null },
+  "M83": { homeScore: 3, awayScore: 0, penWinner: null },
+  "M87": { homeScore: 2, awayScore: 1, penWinner: null },
+  "M84": { homeScore: 2, awayScore: 0, penWinner: null },
+  "M86": { homeScore: 1, awayScore: 1, penWinner: "Egypt"},
+  "M85": { homeScore: 3, awayScore: 2, penWinner: null },
+  "M88": { homeScore: 1, awayScore: 0, penWinner: null },
 
   // ── Round of 16 ──────────────────────────────────────────
-  // "M101": { homeScore: 2, awayScore: 1, penWinner: null },
+  "M90": { homeScore: 0, awayScore: 2, penWinner: null },
+  "M89": { homeScore: 0, awayScore: 1, penWinner: null },
 };
-
+  
 // ============================================================
 //  END OF RESULTS SECTION
 // ============================================================
@@ -389,21 +422,21 @@ const R32_FIXTURES = [
 // ============================================================
 const R16_FIXTURES = [
    { matchId:"M89", date:"Sat 4 Jul", label:"Round of 16", venue:"Philadelphia",
-    home:null, away:null, homeDesc:"Winner M74", awayDesc:"Winner M77" },
+    home:"Paraguay", away:"France", homeDesc:"Paraguay", awayDesc:"France" },
   { matchId:"M90", date:"Sat 4 Jul", label:"Round of 16", venue:"Houston",
-    home:"Canada", away:null, homeDesc:"Canada", awayDesc:"Winner M75" },
+    home:"Canada", away:"Morocco", homeDesc:"Canada", awayDesc:"Morocco" },
   { matchId:"M91", date:"Sun 5 Jul", label:"Round of 16", venue:"New York New Jersey",
-    home:null, away:null, homeDesc:"Winner M76", awayDesc:"Winner M78" },
+    home:"Brazil", away:"Norway", homeDesc:"Brazil", awayDesc:"Norway" },
   { matchId:"M92", date:"Sun 5 Jul", label:"Round of 16", venue:"Mexico City",
-    home:null, away:null, homeDesc:"Winner M79", awayDesc:"Winner M80" },
+    home:"Mexico", away:"England", homeDesc:"Mexico", awayDesc:"England" },
   { matchId:"M93", date:"Mon 6 Jul", label:"Round of 16", venue:"Dallas",
-    home:null, away:null, homeDesc:"Winner M83", awayDesc:"Winner M84" },
+    home:"Portugal", away:"Spain", homeDesc:"Portugal", awayDesc:"Spain" },
   { matchId:"M94", date:"Mon 6 Jul", label:"Round of 16", venue:"Seattle",
-    home:null, away:null, homeDesc:"Winner M81", awayDesc:"Winner M82" },
+    home:"USA", away:"Belgium", homeDesc:"USA", awayDesc:"Belgium" },
   { matchId:"M95", date:"Tue 7 Jul", label:"Round of 16", venue:"Atlanta",
-    home:null, away:null, homeDesc:"Winner M86", awayDesc:"Winner M88" },
+    home:"Argentina", away:"Egypt", homeDesc:"Argentina", awayDesc:"Egypt" },
   { matchId:"M96", date:"Tue 7 Jul", label:"Round of 16", venue:"Vancouver",
-    home:null, away:null, homeDesc:"Winner M85", awayDesc:"Winner M87" },
+    home:"Switzerland", away:"Colombia", homeDesc:"Switzerland", awayDesc:"Colombia" },
 ];
 
 function getSWGroup(name){
